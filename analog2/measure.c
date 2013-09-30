@@ -1,4 +1,4 @@
-#include "analog1.h"
+#include "analog2.h"
 
 uint16_t ReadChannel(uint8_t channel, uint8_t configurebits) {
 	if (DEBUG) return 0xAA;
