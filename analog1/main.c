@@ -100,6 +100,7 @@ int main(void)
 
 				TWI_Get_Data_From_Transceiver(messagebuf, 2); // fetch the data to messagebuff
 				switch(messagebuf[0]) {
+
 					case GET_TEMPERATURE: SendDataBack(ReadTemperature()); break;
 					case GET_SOUND: SendDataBack(ReadTemperature()); break;
 					case GET_LIGHT: SendDataBack(ReadLight());break;
