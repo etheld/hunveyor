@@ -35,9 +35,7 @@ void init_AD(void) {
 	//    1  MUX1
 	//    0  MUX0
 
-	ADMUX = (0<<MUX0)	  //0. channel (temperature)
-					  | (0<<REFS1) | (1<<REFS0)    //AVcc as reference value
-					  | (0<<ADLAR);	  //aligned to right
+	ADMUX = ADC_REF_POWER | (0<<ADLAR);	  //aligned to right
 
 	//    7  ADEN
 	//       ADC engedélyezve ha értéke 1, kikapcsolva ha 0.
@@ -71,11 +69,8 @@ void init_AD(void) {
 	//       110 - 64
 	//       111 - 128
 
-	ADCSRA = (1<<ADEN)    //adc enable
-	        		 | (1<<ADPS2)
-	        		 | (1<<ADPS1)
-	        		 | (1<<ADPS0)	  // prescale 128
-	        		 | (1<<ADIE);	  //AD interrupt enable
+	ADCSRA = (1<<ADEN) | ADC_PRESCALER;
+
 }
 
 void SendDataBack(uint16_t data) {
@@ -83,13 +78,14 @@ void SendDataBack(uint16_t data) {
 	uint8_t lsb = (uint8_t)data;
 	uint8_t msb = data >> 8;
 	messagebuf[0] = lsb;
-	messagebuf[1] = msb | 0x11;
+	messagebuf[1] = msb;
 	TWI_Start_Transceiver_With_Data(messagebuf,2); // sending the reply
 }
 int main(void)
 {
 
 	init_i2c();
+	init_AD();
 	unsigned char messagebuf[8];  // message buffer to receive commands
 
 	sei(); // allow interrupts
