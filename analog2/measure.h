@@ -9,11 +9,11 @@
 #define MEASURE_H_
 
 
-uint16_t ReadRed();
-uint16_t ReadSound();
-uint16_t ReadTemperature();
-uint16_t ReadLight();
-uint16_t ReadYellow();
-uint16_t ReadGreen();
-uint16_t ReadUV();
+uint16_t ReadHumidity();
+uint16_t ReadPressure();
+uint16_t ReadGas();
+void Gas();
+void Dust();
+void Pressure();
+
 #endif /* MEASURE_H_ */

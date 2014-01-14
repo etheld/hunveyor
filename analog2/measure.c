@@ -1,42 +1,55 @@
 #include "analog2.h"
 
 uint16_t ReadChannel(uint8_t channel, uint8_t configurebits) {
-	if (DEBUG) return 0xAA;
+#ifdef DEBUG
+	return 0xAA;
+#endif
+	uint8_t low;
 	PORTD = configurebits << 4;
-	ADMUX = (0 << MUX1) | (0 << MUX0) | (0 << REFS1) | (1 << REFS0) | (0<ADLAR) | channel;
-	//ADMUX = (ADMUX & 0xF8) | channel; // clears last 3 bits before ORing
-	//ADCSRA |= (1<<ADSC);    //start ad convert
-	//while(ADCSRA & (1<<ADSC)); // wait till the data has been converted
-
-	// do it one more time, the result is pretty noise if adc turned on
+	ADMUX = ADC_REF_POWER | (0<ADLAR);
+	ADMUX = (ADMUX & 0xF8) | channel; // clears last 3 bits before ORing
 
 	ADCSRA |= (1<<ADSC);    //start ad convert
 	while(ADCSRA & (1<<ADSC)); // wait till the data has been converted
 
-	return (ADC);
+	low = ADCL; // must read LSB first
+
+	return (ADCH<<8) | low;
+
 }
-uint16_t ReadTemperature() {
+uint16_t ReadHumidity() {
 	return ReadChannel(0, 0);
 }
 
-uint16_t ReadLight() {
-	return ReadChannel(2, 0);
+uint16_t ReadPressure() {
+	return ReadChannel(1, 0);
 }
 
-uint16_t ReadSound() {
-	return ReadChannel(1,0);
+uint16_t ReadGas() {
+	return ReadChannel(2,0);
 }
-
-uint16_t ReadRed() {
+uint16_t ReadDust() {
 	return ReadChannel(3,0);
 }
-uint16_t ReadYellow() {
-	return ReadChannel(3,2);
-}
-uint16_t ReadGreen() {
-	return ReadChannel(3,4);
-}
-uint16_t ReadUV() {
-	return ReadChannel(3,6);
-}
 
+void Gas(int toggle) {
+	if (toggle == 1) {
+		PORTD |= 0x4;
+	} else {
+		PORTD &= (~0x4);
+	}
+}
+void Dust(int toggle) {
+	if (toggle == 1) {
+		PORTD |= 0x8;
+	} else {
+		PORTD &= (~0x8);
+	}
+}
+void Pressure(int toggle) {
+	if (toggle == 1) {
+		PORTD |= 0x2;
+	} else {
+		PORTD &= (~0x2);
+	}
+}

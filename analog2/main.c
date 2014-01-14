@@ -74,8 +74,8 @@ void init_AD(void) {
 	ADCSRA = (1<<ADEN)    //adc enable
 	        		 | (1<<ADPS2)
 	        		 | (1<<ADPS1)
-	        		 | (1<<ADPS0)	  // prescale 128
-	        		 | (1<<ADIE);	  //AD interrupt enable
+	        		 | (1<<ADPS0);	  // prescale 128
+	        	//	 | (1<<ADIE);	  //AD interrupt enable
 }
 
 void SendDataBack(uint16_t data) {
@@ -94,6 +94,7 @@ int main(void)
 
 	sei(); // allow interrupts
 	TWI_Start_Transceiver(); // start up the communications
+	init_AD();
 	do {
 		if (!TWI_Transceiver_Busy()) {
 			if ( TWI_statusReg.RxDataInBuf) { // there is data in the receive buff and last transaction was okay
@@ -101,13 +102,16 @@ int main(void)
 				TWI_Get_Data_From_Transceiver(messagebuf, 2); // fetch the data to messagebuff
 				switch(messagebuf[0]) {
 
-					case GET_TEMPERATURE: SendDataBack(ReadTemperature()); break;
-					case GET_SOUND: SendDataBack(ReadTemperature()); break;
-					case GET_LIGHT: SendDataBack(ReadLight());break;
-					case GET_RED: SendDataBack(ReadRed()); break;
-					case GET_YELLOW: SendDataBack(ReadYellow());break;
-					case GET_GREEN: SendDataBack(ReadGreen()); break;
-					case GET_UV: SendDataBack(ReadUV()); break;
+					case GET_HUMIDITY: SendDataBack(ReadHumidity()); break;
+					case GET_PRESSURE: SendDataBack(ReadPressure()); break;
+					case GET_GAS: SendDataBack(ReadGas());break;
+					case GET_DUST: SendDataBack(ReadDust()); break;
+					case DUST_ON: Dust(1);break;
+					case DUST_OFF: Dust(0); break;
+					case GAS_ON: Gas(1); break;
+					case GAS_OFF: Gas(0); break;
+					case PRESSURE_ON: Pressure(1); break;
+					case PRESSURE_OFF: Pressure(0); break;
 					default: SendDataBack(0xab << 8 | messagebuf[0]);
 				}
 			}
