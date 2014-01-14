@@ -8,6 +8,7 @@
 
 #define SLAVE_ADDR 0x07
 
+#define TEST_BYTE 0xAA
 
 #define GET_TEMPERATURE 0x20
 #define GET_SOUND 0x21

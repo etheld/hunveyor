@@ -21,6 +21,8 @@
 #define PRESSURE_ON 0x28
 #define PRESSURE_OFF 0x29
 
+#define TEST_BYTE 0xAA
+
 #define ADC_PRESCALER ((1<<ADPS2) | (1<<ADPS1)) // prescale 64
 
 #define ADC_REF_EXTERNAL (0)

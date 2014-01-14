@@ -96,9 +96,9 @@ int main(void)
 
 				TWI_Get_Data_From_Transceiver(messagebuf, 2); // fetch the data to messagebuff
 				switch(messagebuf[0]) {
-
+					case TEST_BYTE: SendDataBack(0xAA);break;
 					case GET_TEMPERATURE: SendDataBack(ReadTemperature()); break;
-					case GET_SOUND: SendDataBack(ReadTemperature()); break;
+					case GET_SOUND: SendDataBack(ReadSound()); break;
 					case GET_LIGHT: SendDataBack(ReadLight());break;
 					case GET_RED: SendDataBack(ReadRed()); break;
 					case GET_YELLOW: SendDataBack(ReadYellow());break;

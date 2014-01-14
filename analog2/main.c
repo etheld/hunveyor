@@ -101,7 +101,7 @@ int main(void)
 
 				TWI_Get_Data_From_Transceiver(messagebuf, 2); // fetch the data to messagebuff
 				switch(messagebuf[0]) {
-
+					case TEST_BYTE: SendDataBack(0xAA);break;
 					case GET_HUMIDITY: SendDataBack(ReadHumidity()); break;
 					case GET_PRESSURE: SendDataBack(ReadPressure()); break;
 					case GET_GAS: SendDataBack(ReadGas());break;
